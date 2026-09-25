@@ -25,18 +25,12 @@
                     <label for="time_casa_id">Time da Casa *</label>
                     <select id="time_casa_id" name="time_casa_id" required>
                         <option value="">Selecione</option>
-                        {% for t in times %}
-                            <option value="{{ t.id }}">{{ t.nome }}</option>
-                        {% endfor %}
                     </select>
                 </div>
                 <div class="campo">
                     <label for="time_visitante_id">Time Visitante *</label>
                     <select id="time_visitante_id" name="time_visitante_id" required>
                         <option value="">Selecione</option>
-                        {% for t in times %}
-                            <option value="{{ t.id }}">{{ t.nome }}</option>
-                        {% endfor %}
                     </select>
                 </div>
             </div>

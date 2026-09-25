@@ -19,7 +19,7 @@ def dashboard():
 
 @app.route("/jogadores")
 def listar_jogadores():
-    return render_template("jogadores.html", jogadores=[], editar=None, times=[])
+    return render_template("jogadores.html", jogadores=[], times=[])
 
 
 @app.route("/jogadores/novo", methods=["GET", "POST"])
@@ -31,12 +31,12 @@ def novo_jogador():
         posicao = request.form.get("posicao", "").strip()
         time_id = request.form.get("time_id") or None
 
-    return render_template("jogadores.html", jogadores=[], editar=None, times=[])
+    return render_template("jogadores.html", jogadores=[], times=[])
 
 
 @app.route("/times")
 def listar_times():
-    return render_template("times.html", times=[], editar=None)
+    return render_template("times.html", times=[])
 
 
 @app.route("/times/novo", methods=["GET", "POST"])
@@ -46,13 +46,13 @@ def novo_time():
         nome = request.form.get("nome", "").strip()
         cor = request.form.get("cor", "").strip()
 
-    return render_template("times.html", times=[], editar=None)
+    return render_template("times.html", times=[])
 
 
 @app.route("/partidas")
 def listar_partidas():
 
-    return render_template("partidas.html", partidas=[], editar=None, times=[])
+    return render_template("partidas.html", partidas=[], times=[])
 
 
 @app.route("/partidas/nova", methods=["GET", "POST"])
@@ -66,7 +66,7 @@ def nova_partida():
         data_partida = request.form.get("data_partida", "").strip()
         local = request.form.get("local", "").strip()
 
-    return render_template("partidas.html", partidas=[], editar=None, times=[])
+    return render_template("partidas.html", partidas=[], times=[])
 
 
 if __name__ == "__main__":
