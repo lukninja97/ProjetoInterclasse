@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, g
-from database import init_db, get_session, Time, Jogador, Partida, SessionLocal
+from database import *
 
 app = Flask(__name__)
 app.secret_key = "chave-secreta-interclasse-2026"
