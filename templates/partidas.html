@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block titulo %}Partidas{% endblock %}
+
+{% block conteudo %}
+    <div class="cabecalho-pagina">
+        <div>
+            <h1>Partidas</h1>
+            <p class="subtitulo">Cadastro das partidas do interclasse</p>
+        </div>
+
+        <a href="{{ url_for('nova_partida') }}" class="botao">+ Nova Partida</a>
+
+    </div>
+
+    {% if request.endpoint == 'nova_partida' %}
+    <section class="painel formulario">
+        <h2>Nova Partida</h2>
+
+        {% if not times %}
+            <p class="vazio">Cadastre pelo menos dois times antes de criar uma partida.</p>
+        {% else %}
+        <form method="POST" action="{{ url_for('nova_partida') }}">
+            <div class="linha-campos">
+                <div class="campo">
+                    <label for="time_casa_id">Time da Casa *</label>
+                    <select id="time_casa_id" name="time_casa_id" required>
+                        <option value="">Selecione</option>
+                        {% for t in times %}
+                            <option value="{{ t.id }}">{{ t.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="campo">
+                    <label for="time_visitante_id">Time Visitante *</label>
+                    <select id="time_visitante_id" name="time_visitante_id" required>
+                        <option value="">Selecione</option>
+                        {% for t in times %}
+                            <option value="{{ t.id }}">{{ t.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="linha-campos">
+                <div class="campo">
+                    <label for="placar_casa">Placar Casa</label>
+                    <input type="number" id="placar_casa" name="placar_casa" min="0" value="0">
+                </div>
+                <div class="campo">
+                    <label for="placar_visitante">Placar Visitante</label>
+                    <input type="number" id="placar_visitante" name="placar_visitante" min="0" value="0">
+                </div>
+            </div>
+            <div class="linha-campos">
+                <div class="campo">
+                    <label for="data_partida">Data</label>
+                    <input type="date" id="data_partida" name="data_partida">
+                </div>
+                <div class="campo">
+                    <label for="local">Local</label>
+                    <input type="text" id="local" name="local" placeholder="Ex: Quadra 1">
+                </div>
+            </div>
+            <div class="acoes-form">
+                <button type="submit" class="botao">Cadastrar</button>
+                <a href="{{ url_for('listar_partidas') }}" class="botao botao-secundario">Cancelar</a>
+            </div>
+        </form>
+        {% endif %}
+    </section>
+    {% endif %}
+
+    <section class="painel">
+        <h2>Lista de Partidas</h2>
+        {% if partidas %}
+        <table>
+<!--            Insira sua tabela aqui  -->
+        </table>
+        {% else %}
+            <p class="vazio">Nenhuma partida cadastrada ainda.</p>
+        {% endif %}
+    </section>
+{% endblock %}
