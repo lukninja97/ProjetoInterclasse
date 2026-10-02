@@ -1,11 +1,10 @@
 import os
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
-from sqlalchemy.orm import declarative_base, relationship, sessionmaker
+from sqlalchemy.orm import declarative_base, relationship, sessionmaker, scoped_session
 
+engine = create_engine("mysql+pymysql://root:admin123@localhost:3306/interclasse_db")
 
-engine = create_engine("mysql+pymysql://usuario:senha@localhost:3306/nomedobanco")
-
-SessionLocal = sessionmaker(bind=engine)
+db_session = scoped_session(sessionmaker(bind=engine))
 
 Base = declarative_base()
 
@@ -14,7 +13,11 @@ class Time(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     nome = Column(String(100), nullable=False)
-    turma = Column(String(50))
+    turma = Column(String(20))
+    responsavel = Column(String(100))
+
+    def __repr__(self):
+        return f'{self.id} - {self.nome}'
 
 
 class Jogador(Base):
@@ -22,9 +25,14 @@ class Jogador(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     nome = Column(String(100), nullable=False)
-    idade = Column(Integer)
+    numero_camisa = Column(Integer)
     posicao = Column(String(50))
     time_id = Column(Integer, ForeignKey("times.id", ondelete="SET NULL"))
+
+    time = relationship("Time")
+
+    def __repr__(self):
+        return f'{self.id} {self.nome} {self.time_id}'
 
 
 class Partida(Base):
@@ -33,8 +41,8 @@ class Partida(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     time_casa_id = Column(Integer, ForeignKey("times.id", ondelete="CASCADE"), nullable=False)
     time_visitante_id = Column(Integer, ForeignKey("times.id", ondelete="CASCADE"), nullable=False)
-    placar_casa = Column(Integer, default=0)
-    placar_visitante = Column(Integer, default=0)
+    gols_casa = Column(Integer, default=0)
+    gols_visitante = Column(Integer, default=0)
     data_partida = Column(String(20))
 
 
