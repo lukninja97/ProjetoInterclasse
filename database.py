@@ -1,4 +1,3 @@
-import os
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import declarative_base, relationship, sessionmaker, scoped_session
 
@@ -16,9 +15,6 @@ class Time(Base):
     turma = Column(String(20))
     responsavel = Column(String(100))
 
-    def __repr__(self):
-        return f'{self.id} - {self.nome}'
-
 
 class Jogador(Base):
     __tablename__ = "jogadores"
@@ -28,11 +24,6 @@ class Jogador(Base):
     numero_camisa = Column(Integer)
     posicao = Column(String(50))
     time_id = Column(Integer, ForeignKey("times.id", ondelete="SET NULL"))
-
-    time = relationship("Time")
-
-    def __repr__(self):
-        return f'{self.id} {self.nome} {self.time_id}'
 
 
 class Partida(Base):

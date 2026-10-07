@@ -8,7 +8,7 @@ from database import Jogador, db_session, Time
 
 def select_todos():
     # 1 - Montar o select
-    jogadores_sql = select(Jogador.id, Jogador.nome, Jogador.numero_camisa, Jogador.posicao, Time.nome).join(Jogador.time)
+    jogadores_sql = select(Jogador)
     # 2 - Executar o select
     jogadores = db_session.execute(jogadores_sql).all()
     print(jogadores)
