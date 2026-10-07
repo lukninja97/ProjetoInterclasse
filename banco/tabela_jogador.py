@@ -10,7 +10,7 @@ def select_todos():
     # 1 - Montar o select
     jogadores_sql = select(Jogador)
     # 2 - Executar o select
-    jogadores = db_session.execute(jogadores_sql).all()
+    jogadores = db_session.execute(jogadores_sql).scalars().all()
     print(jogadores)
 
     return jogadores
