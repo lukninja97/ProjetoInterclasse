@@ -1,9 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, g
-from sqlalchemy import select
-from sqlalchemy.exc import SQLAlchemyError
-
+from flask import Flask, render_template, request, redirect, url_for, flash
 from banco import tabela_time, tabela_jogador, tabela_partida
-from database import *
+from database import db_session
 
 app = Flask(__name__)
 app.secret_key = "chave-secreta-interclasse-2026"
@@ -12,15 +9,18 @@ app.secret_key = "chave-secreta-interclasse-2026"
 @app.route("/")
 def dashboard():
     # Buscar todos os times no banco
-    times = tabela_time.select_todos()
-    jogadores = tabela_jogador.select_todos()
-    partidas = tabela_partida.select_todos()
+    times = tabela_time.select_quantidade_total()
+    jogadores = tabela_jogador.select_quantidade_total()
+    partidas = tabela_partida.select_quantidade_total()
 
     return render_template(
         "dashboard.html",
         total_jogadores=len(jogadores),
         total_times=len(times),
         total_partidas=len(partidas)
+        total_jogadores=jogadores,
+        total_times=times,
+        total_partidas=partidas
     )
 
 

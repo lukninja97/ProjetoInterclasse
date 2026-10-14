@@ -15,6 +15,9 @@ class Time(Base):
     turma = Column(String(20))
     responsavel = Column(String(100))
 
+    def __repr__(self):
+        return f"<Time: {self.nome}>"
+
 
 class Jogador(Base):
     __tablename__ = "jogadores"
@@ -35,6 +38,9 @@ class Partida(Base):
     gols_casa = Column(Integer, default=0)
     gols_visitante = Column(Integer, default=0)
     data_partida = Column(String(20))
+
+    def __repr__(self):
+        return f"<Partida: {self.id}>"
 
 
 if __name__ == "__main__":
