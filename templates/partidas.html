@@ -71,8 +71,7 @@
                 <tr>
                     <th>Id</th>
                     <th>Time Casa</th>
-                    <th>Gols Casa</th>
-                    <th>Gols Visitante</th>
+                    <th>Placar</th>
                     <th>Time Visitante</th>
                     <th>Data Partida</th>
                 </tr>
@@ -81,10 +80,9 @@
             {% for partida, time_casa, time_visitante in partidas %}
                 <tr>
                     <td>{{ partida.id }}</td>
-                    <td>{{ time_casa.nome }}</td>
-                    <td>{{ partida.gols_casa }}</td>
-                    <td>{{ partida.gols_visitante }}</td>
-                    <td>{{ time_visitante.nome }}</td>
+                    <td class="{% if partida.gols_casa != partida.gols_visitante %} resultado-{% if partida.gols_casa > partida.gols_visitante %}v {% else %}d {% endif %} {% endif %}">{{ time_casa.nome }}</td>
+                    <td>{{ partida.gols_casa }} x {{ partida.gols_visitante }}</td>
+                    <td class="{% if partida.gols_casa != partida.gols_visitante %} resultado-{% if partida.gols_visitante > partida.gols_casa %}v {% else %}d {% endif %} {% endif %}">{{ time_visitante.nome }}</td>
                     <td>{{ partida.data_partida }}</td>
                 </tr>
             {% endfor %}

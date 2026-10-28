@@ -28,6 +28,8 @@ class Jogador(Base):
     posicao = Column(String(50))
     time_id = Column(Integer, ForeignKey("times.id", ondelete="SET NULL"))
 
+    def __repr__(self):
+        return f"<Jogador: {self.nome}>"
 
 class Partida(Base):
     __tablename__ = "partidas"

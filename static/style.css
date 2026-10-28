@@ -240,6 +240,8 @@ tbody tr:hover {
 .campo {
     margin-bottom: 16px;
     flex: 1;
+    max-height: 200px;
+    overflow: auto;
 }
 
 .linha-campos {
@@ -325,4 +327,68 @@ input:focus, select:focus {
     background-color: var(--cor-erro-fundo);
     color: var(--cor-erro);
     border: 1px solid #feb2b2;
+}
+
+/* DETALHES DO TIME */
+.voltar {
+    display: inline-block;
+    margin-bottom: 8px;
+    color: var(--cor-texto-claro);
+    text-decoration: none;
+    font-size: 0.85rem;
+}
+
+.voltar:hover {
+    color: var(--cor-primaria);
+}
+
+.link-time {
+    color: var(--cor-primaria);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.link-time:hover {
+    text-decoration: underline;
+}
+
+.cartoes-compactos {
+    display: flex;
+    gap: 16px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.cartoes-compactos .cartao {
+    min-width: 100px;
+    padding: 14px 18px;
+}
+
+.cartoes-compactos .cartao-valor {
+    font-size: 1.5rem;
+}
+
+.resultado {
+    display: inline-block;
+    min-width: 26px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.resultado-v {
+    color: var(--cor-sucesso);
+    font-weight: bold;
+}
+
+.resultado-e {
+    background-color: #718096;
+}
+
+.resultado-d {
+    color: var(--cor-erro);
+    font-weight: bold;
 }

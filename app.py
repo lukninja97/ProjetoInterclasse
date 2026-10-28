@@ -15,9 +15,6 @@ def dashboard():
 
     return render_template(
         "dashboard.html",
-        total_jogadores=len(jogadores),
-        total_times=len(times),
-        total_partidas=len(partidas)
         total_jogadores=jogadores,
         total_times=times,
         total_partidas=partidas
@@ -83,6 +80,7 @@ def novo_time():
         nome = request.form.get("nome")
         turma = request.form.get("turma")
         responsavel = request.form.get("responsavel")
+        jogadores_ids = request.form.getlist("jogadores")
 
         # 2 - Verificar se foi digitado
         if not nome:
@@ -96,10 +94,53 @@ def novo_time():
             return redirect(url_for("novo_time"))
 
         # 3 - Salvar no banco
-        tabela_time.salvar(nome=nome, turma=turma, responsavel=responsavel)
+        time = tabela_time.salvar(nome=nome, turma=turma, responsavel=responsavel)
+
+        if jogadores_ids:
+            for jogador_id in jogadores_ids:
+                jogador = tabela_jogador.select_um(jogador_id)
+                jogador.time_id = time.id
+                db_session.add(jogador)
+                db_session.commit()
+
 
     times = tabela_time.select_todos()
-    return render_template("times.html", times=times)
+    jogadores = tabela_jogador.select_todos()
+    return render_template("times.html", times=times, jogadores=jogadores)
+
+
+@app.route("/time/<id_time>")
+def detalhes_time(id_time):
+    time = tabela_time.select_um(int(id_time))
+    jogadores = tabela_jogador.select_por_time(int(id_time))
+    partidas = tabela_partida.select_por_time(int(id_time))
+    return render_template(
+        "time_detalhes.html",
+        time=time,
+        jogadores=jogadores,
+        qtd_jogadores=len(jogadores),
+        partidas=partidas,
+        qtd_partidas=len(partidas)
+    )
+
+
+@app.route("/times/<int:time_id>")
+def detalhes_timee(time_id):
+    time_obj = tabela_time.select_um(time_id)
+    partidas = tabela_partida.select_partidas_time(time_id)
+    jogadores = tabela_jogador.select_jogadores_por_time(time_id)
+    estatisticas = tabela_partida.select_estatisticas(time_id)
+
+
+    return render_template(
+        "time_detalhes.html",
+        time=time_obj,
+        jogadores=jogadores,
+        qtd_jogadores=len(jogadores),
+        qtd_partidas=len(partidas),
+        partidas=partidas,
+        estatisticas=estatisticas
+    )
 
 @app.route("/partidas")
 def listar_partidas():
