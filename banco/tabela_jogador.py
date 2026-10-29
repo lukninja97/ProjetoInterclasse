@@ -4,7 +4,6 @@ from sqlalchemy.exc import SQLAlchemyError
 from database import Jogador, db_session, Time
 
 
-
 def select_todos():
     # 1 - Montar o select
     # join(Tabela que eu quero juntar, condição = chave estrangeira igual chave primaria)

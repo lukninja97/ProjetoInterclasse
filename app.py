@@ -43,7 +43,7 @@ def novo_jogador():
             flash("Preencha o nome", "error")
             return redirect(url_for("novo_jogador"))
         if not numero_camisa:
-            flash("Preencha a turma", "error")
+            flash("Preencha o número da camisa", "error")
             return redirect(url_for("novo_jogador"))
         if not posicao:
             flash("Preencha a posição", "error")
@@ -65,6 +65,43 @@ def novo_jogador():
     # Carregar o formulario
     return render_template("jogadores.html", jogadores=jogadores, times=times)
 
+@app.route("/jogadores/<id_jogador>", methods=["GET", "POST"])
+def editar_jogador(id_jogador):
+    # Buscar o jogador no banco
+    jogador = tabela_jogador.select_um(id_jogador)
+
+    # Salvar as alterações
+    if request.method == "POST":
+        # 1 - Pegar os valores digitados no form
+        nome = request.form.get("nome").strip()
+        numero_camisa = request.form.get("camisanumero") or None
+        posicao = request.form.get("posicao", "").strip()
+        time_id = request.form.get("time_id") or None
+
+        # 2 - Verificar se foi digitado
+        if not nome:
+            flash("Preencha o nome", "error")
+        elif not numero_camisa:
+            flash("Preencha o número da camisa", "error")
+        elif not posicao:
+            flash("Preencha a posição", "error")
+        elif not time_id:
+            flash("Preencha o time", "error")
+        else:
+            jogador.nome = nome
+            jogador.numero_camisa = numero_camisa
+            jogador.posicao = posicao
+            jogador.time_id = int(time_id)
+            db_session.commit()
+
+            flash("Jogador alterado com sucesso", "success")
+
+        return redirect(url_for("listar_jogadores"))
+
+    # Carregar as informações
+    jogadores = tabela_jogador.select_todos()
+    times = tabela_time.select_todos()
+    return render_template("jogadores.html", jogadores=jogadores, editar=jogador, times=times)
 
 @app.route("/times")
 def listar_times():
