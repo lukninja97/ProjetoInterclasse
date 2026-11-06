@@ -11,7 +11,6 @@ def select_todos():
     # 2 - Executar o select
     # usar scalars quando tiver somente uma tabela
     jogadores = db_session.execute(jogadores_sql).all()
-    print(jogadores)
 
     return jogadores
 
