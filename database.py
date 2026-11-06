@@ -1,5 +1,8 @@
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import declarative_base, relationship, sessionmaker, scoped_session, DeclarativeBase
+from sqlalchemy.sql import func
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
 
 engine = create_engine("mysql+pymysql://root:senaisp@localhost:3306/interclasse_db")
 
@@ -57,6 +60,24 @@ class Movimentacao(Base):
 
     def __repr__(self):
         return f"<Movimentacao: {self.jogador_id}>"
+
+class Usuario(Base, UserMixin):
+    __tablename__ = "usuarios"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    nome = Column(String(50), nullable=False)
+    email = Column(String(120), unique=True, nullable=False)
+    senha_hash = Column(String(255), nullable=False)
+    criado_em = Column(DateTime, server_default=func.now())
+    atualizado_em = Column(DateTime, onupdate=func.now())
+
+    # senha
+    def set_password(self, password):
+        self.senha_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.senha_hash, password)
+
+
 
 if __name__ == "__main__":
     Base.metadata.create_all(bind=engine)
