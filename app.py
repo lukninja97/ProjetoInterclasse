@@ -1,9 +1,11 @@
+from functools import wraps
 from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 from flask import Flask, render_template, request, redirect, url_for, flash
 from banco import tabela_time, tabela_jogador, tabela_partida, tabela_movimentacao
 from database import db_session, Usuario
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+
 
 app = Flask(__name__)
 # secret_key aqui apenas em momento de criação, em produção deve ser protegida
@@ -14,6 +16,7 @@ login_manager = LoginManager(app)
 login_manager.login_view = "login"
 login_manager.login_message = "Faça login para acessar"
 
+
 # Prevenir gargalo "too many connections"
 @app.teardown_appcontext
 def shutdown_session(exception=None):
@@ -23,6 +26,22 @@ def shutdown_session(exception=None):
 @login_manager.user_loader
 def load_user(user_id):
     return db_session.get(Usuario, int(user_id))
+
+def roles_required(*papeis_permitidos):
+    '''
+        Decorator para restringir acesso
+        baseado no papel do usuario logado
+    '''
+    def decorator(f):
+        @wraps(f)
+        @login_required
+        def decorated_function(*args, **kwargs):
+            if current_user.papel not in papeis_permitidos:
+                flash("Acesso negado:Você não tem permissão para acessar esta página", 'danger')
+                return redirect(url_for('dashboard'))
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
 
 # Interface de autenticação
 @app.route('/login', methods=['GET', 'POST'])
@@ -90,7 +109,6 @@ def registro():
             flash(f'Erro ao registrar','error')
             return redirect(url_for('registro'))
     return render_template("login.html")
-
 
 @app.route("/")
 @login_required
@@ -315,6 +333,7 @@ def nova_partida():
 
 @app.route("/movimentacao/nova/<int:id_jogador>")
 @app.route("/movimentacao/nova", methods=["GET", "POST"])
+@roles_required('admin')
 def nova_movimentacao(id_jogador=None):
     if request.method == "POST":
         # 1 - Pegar informaçõe do formulario
